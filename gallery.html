@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #1e1e2f;
+    color: white;
+    text-align: center;
+}
+
+/* OVERLAY */
+#startOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    backdrop-filter: blur(5px);
+}
+.startText {
+    font-size: 16px;
+    opacity: 0.85;
+    animation: pulse 1.5s infinite;
+}
+
+/* CONTAINER */
+.container {
+    padding: 25px 12px;
+}
+
+/* TITLE */
+h1 {
+    font-size: 18px;
+    margin-bottom: 20px;
+    opacity: 0.85;
+}
+
+/* GRID 2 KOLOM */
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+/* FOTO */
+.photo {
+    overflow: hidden;
+    border-radius: 12px;
+    opacity: 0;
+    transform: translateX(30px) scale(0.95);
+    transition: 1s ease;
+}
+.photo.left  { transform: translateX(-30px) scale(0.95); }
+.photo.right { transform: translateX(30px)  scale(0.95); }
+
+.photo.show {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+}
+
+.photo img {
+    width: 100%;
+    display: block;
+}
+
+/* CLOSING */
+.closing {
+    margin-top: 40px;
+    font-size: 14px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: 1s;
+}
+.closing.show {
+    opacity: 0.7;
+    transform: translateY(0);
+}
+
+/* ACTIONS */
+.actions {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+
+    opacity: 0;
+    transform: translateY(20px);
+    transition: 1s;
+}
+.actions.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+.actions button {
+    padding: 10px 20px;
+    border-radius: 25px;
+    border: none;
+    background: #ff6b81;
+    color: white;
+}
+.actions button:active { transform: scale(0.95); }
+
+/* ANIM */
+@keyframes pulse {
+    0% {transform: scale(1);}
+    50% {transform: scale(1.1);}
+    100% {transform: scale(1);}
+}
+</style>
+</head>
+
+<body>
+
+<!-- TAP OVERLAY -->
+<div id="startOverlay">
+    <div class="startText">Tap layar untuk lanjut</div>
+</div>
+
+<div class="container">
+    <h1>MISS U SO :(</h1>
+
+    <div class="gallery">
+        <div class="photo left"><img src="images/foto1.jpg"></div>
+        <div class="photo right"><img src="images/foto2.jpg"></div>
+
+        <div class="photo left"><img src="images/foto3.jpg"></div>
+        <div class="photo right"><img src="images/foto4.jpg"></div>
+
+        <div class="photo left"><img src="images/foto5.jpg"></div>
+        <div class="photo right"><img src="images/foto6.jpg"></div>
+
+        <div class="photo left"><img src="images/foto7.jpg"></div>
+        <div class="photo right"><img src="images/foto8.jpg"></div>
+
+        <div class="photo left"><img src="images/foto9.jpg"></div>
+        <div class="photo right"><img src="images/foto10.jpg"></div>
+
+        <div class="photo left"><img src="images/foto11.jpg"></div>
+        <div class="photo right"><img src="images/foto12.jpg"></div>
+
+        <div class="photo left"><img src="images/foto13.jpg"></div>
+        <div class="photo right"><img src="images/foto14.jpg"></div>
+
+        <div class="photo left"><img src="images/foto15.jpg"></div>
+        <div class="photo right"><img src="images/foto16.jpg"></div>
+    </div>
+
+    <div class="closing" id="closing">
+        Daffa ingin buat lagi moment happy ini sayang.
+    </div>
+
+    <div class="actions" id="actions">
+        <button onclick="goBack()">Kembali</button>
+        <button onclick="nextPage()">Lanjut</button>
+    </div>
+</div>
+
+<!-- AUDIO -->
+<audio id="bgm" loop>
+    <source src="audio/gallery.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const photos = document.querySelectorAll(".photo");
+const closing = document.getElementById("closing");
+const actions = document.getElementById("actions");
+const overlay = document.getElementById("startOverlay");
+const audio = document.getElementById("bgm");
+
+let revealIndex = 0;
+
+// SEQUENCE: tampil 1 per 1 tiap ~1 detik
+function revealNext() {
+    if (revealIndex >= photos.length) {
+        // semua foto sudah tampil → closing
+        setTimeout(() => {
+            closing.classList.add("show");
+
+            // lalu tombol
+            setTimeout(() => {
+                actions.classList.add("show");
+            }, 1200);
+
+        }, 800);
+        return;
+    }
+
+    const photo = photos[revealIndex];
+    photo.classList.add("show");
+    revealIndex++;
+
+    setTimeout(revealNext, 1000); // ⏳ jeda 1 detik (ubah ke 1200-1500 kalau mau lebih pelan)
+}
+
+// TAP START (Safari-safe)
+overlay.addEventListener("click", () => {
+    audio.volume = 0.4;
+    audio.play().catch(() => {});
+
+    overlay.style.opacity = "0";
+    overlay.style.transition = "0.6s";
+
+    setTimeout(() => {
+        overlay.style.display = "none";
+    }, 600);
+
+    // mulai sequence setelah overlay hilang
+    setTimeout(() => {
+        revealNext();
+    }, 400);
+});
+
+// NAVIGATION
+function goBack() {
+    audio.pause();
+    window.location.href = "surat.html";
+}
+
+function nextPage() {
+    audio.pause();
+    window.location.href = "video.html";
+}
+</script>
+
+</body>
+</html>

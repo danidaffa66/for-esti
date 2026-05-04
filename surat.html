@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Surat Untuk Esti</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #1e1e2f;
+    color: white;
+}
+
+/* CONTAINER */
+.container {
+    max-width: 700px;
+    margin: auto;
+    padding: 50px 20px;
+}
+
+/* TITLE */
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    animation: fadeIn 1.5s ease;
+}
+
+/* LETTER */
+.letter {
+    font-size: 17px;
+    line-height: 1.8;
+    white-space: pre-line;
+    min-height: 200px;
+}
+
+/* CLOSING */
+.closing {
+    text-align: center;
+    margin-top: 50px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: 0.8s;
+}
+
+.closing.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* HEART */
+.heart {
+    font-size: 32px;
+    margin-top: 10px;
+    animation: pulse 1.5s infinite;
+}
+
+/* BUTTON AREA */
+.actions {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+
+    opacity: 0;
+    transform: translateY(20px);
+    transition: 0.8s;
+}
+
+.actions.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* BUTTON */
+.actions button {
+    padding: 12px 20px;
+    border-radius: 25px;
+    border: none;
+    background: #ff6b81;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.actions button:active {
+    transform: scale(0.95);
+}
+
+/* OVERLAY TAP */
+#startOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    backdrop-filter: blur(5px);
+}
+
+.startText {
+    font-size: 16px;
+    opacity: 0.8;
+    animation: pulse 1.5s infinite;
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+@keyframes pulse {
+    0% {transform: scale(1);}
+    50% {transform: scale(1.1);}
+    100% {transform: scale(1);}
+}
+</style>
+</head>
+
+<body>
+
+<!-- OVERLAY -->
+<div id="startOverlay">
+    <div class="startText">Tap untuk mulai</div>
+</div>
+
+<div class="container">
+    <h1>Hai Pramesthi Utami</h1>
+
+    <div class="letter" id="typing"></div>
+
+    <div class="closing">
+        Sehat terus ya, daffa sayang kamu selalu 🖤
+        <div class="heart">🖤</div>
+    </div>
+
+    <div class="actions">
+        <button onclick="goBack()">Kembali</button>
+        <button onclick="nextPage()">Lanjut</button>
+    </div>
+</div>
+
+<!-- AUDIO -->
+<audio id="bgm" loop>
+    <source src="audio/surat.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const text = `Assalamualaikum,
+
+Apa kabar? Daffa harap selalu kabar baik ya,
+Udah 2 tahun 3 bulan tepat tanggal 3 Mei 2026 kemarin, kita berjuang bareng bareng banyak hal yang kita lewatin.
+
+Seneng sedih udah biasa kita jalanin bareng bareng, untuk daffa pribadi lebih banyak hal yang membahagiakan dibanding rasa sedih nya. even kabar kamu, dikala kamu bangun tidur, jadi kebahagiaan besar buat daffa untuk tau kamu masih hadir seutuhnya di hidup daffa gaada rasa hampa sama sekali buat jalanin hidup, kerjaan, atau apapun yang daffa lakuin. Semuanya rasanya berisi, penuh motivasi, bikin daffa semangat terus jalanin hari hari meskipun daffa sering ngeluh tapi hadirnya kamu bikin hidup daffa jauh lebih tenang.
+
+Disini, daffa mau minta izin
+
+Daffa mau minta izin buat selalu nyertain nama kamu di setiap doa daffa, agar dilancarin masadepan kita, dapet restu dan doa yg selaras dari ortu kita.
+
+Maaf daffa masih banyak kekurangan, masih banyak hal yg harus daffa perbaiki, kamupun udah sering denger kata kata ini terucap
+
+Tapi buat kali ini, daffa minta izin buat bener bener rubah hidup daffa, yang harusnya daffa jadi lebih baik, jadi orang yang bisa kamu banggain, bisa sepenuhnya jadi orang yang worth it buat kamu, daffa ingin berusaha keras untuk semuanya, mungkin berat buat kamu nerima daffa lagi, tapi dengan kata kata ini daffa bener bener komitmen sama diri daffa gamau ngecewain kamu lagi
+
+Daffa bener - bener akan berusaha jadi orang yang punya karakter, punya role yang baik untuk kehidupan kita, jadi sosok yang bisa bikin kamu lebih tenang kalau ada daffa.
+
+Sekali lagi daffa minta izin, 
+buat nyertain nama kamu untuk daffa bener bener minta restu sama mamah papah, mau minta restu buat kelancaran hidup daffa, lanjutin hidup bareng kamu buat kedepannya, dan target rencana masa depan kita
+
+Semoga kita bisa jalan bareng terus sampai kapanpun
+`;
+
+let i = 0;
+const audio = document.getElementById("bgm");
+const overlay = document.getElementById("startOverlay");
+
+function typeWriter() {
+    if (i < text.length) {
+        document.getElementById("typing").innerHTML += text.charAt(i);
+        i++;
+        setTimeout(typeWriter, 30);
+    } else {
+        // munculin closing dulu
+        document.querySelector(".closing").classList.add("show");
+
+        // delay sedikit baru tombol muncul
+        setTimeout(() => {
+            document.querySelector(".actions").classList.add("show");
+        }, 800);
+    }
+}
+
+function goBack() {
+    audio.pause();
+    window.location.href = "index.html";
+}
+
+function nextPage() {
+    audio.pause();
+    window.location.href = "gallery.html";
+}
+
+// TAP UNTUK MULAI (FIX SAFARI)
+overlay.addEventListener("click", () => {
+    // mulai audio
+    audio.volume = 0.4;
+    audio.play().catch(() => {});
+
+    // mulai typing SETELAH tap
+    typeWriter();
+
+    // animasi hilang overlay
+    overlay.style.opacity = "0";
+    overlay.style.transition = "0.5s";
+
+    setTimeout(() => {
+        overlay.style.display = "none";
+    }, 500);
+});
+
+</script>
+
+</body>
+</html>

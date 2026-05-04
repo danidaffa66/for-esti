@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Untuk Kamu</title>
+
+<style>
+body {
+    margin: 0;
+    background: black;
+    font-family: sans-serif;
+    overflow: hidden;
+}
+
+/* TAP OVERLAY */
+#startOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.startText {
+    color: white;
+    font-size: 16px;
+    opacity: 0.8;
+    animation: pulse 1.5s infinite;
+}
+
+/* VIDEO */
+.video-container {
+    width: 100%;
+    height: 100vh;
+}
+
+video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* BLUR OVERLAY */
+.blur-overlay {
+    position: fixed;
+    inset: 0;
+    backdrop-filter: blur(8px);
+    background: rgba(0,0,0,0.4);
+    opacity: 0;
+    transition: 0.6s;
+    z-index: 1;
+}
+
+.blur-overlay.show {
+    opacity: 1;
+}
+
+/* ACTION AREA */
+.actions {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+
+    opacity: 0;
+    transform: scale(0.9);
+    transition: 0.6s ease;
+}
+
+.actions.show {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* TEXT */
+.final-text {
+    color: white;
+    font-size: 16px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: 1s;
+    margin-bottom: 10px;
+    text-align: center;
+    max-width: 80%;
+}
+
+.final-text.show {
+    opacity: 0.9;
+    transform: translateY(0);
+}
+
+/* BUTTON */
+.actions button {
+    padding: 16px 40px;
+    font-size: 16px;
+    border-radius: 30px;
+    border: none;
+    background: #ff6b81;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    min-width: 200px;
+}
+
+.actions button:active {
+    transform: scale(0.95);
+}
+
+/* ANIM */
+@keyframes pulse {
+    0% {transform: scale(1);}
+    50% {transform: scale(1.1);}
+    100% {transform: scale(1);}
+}
+</style>
+</head>
+
+<body>
+
+<!-- TAP -->
+<div id="startOverlay">
+    <div class="startText">Tap untuk mulai</div>
+</div>
+
+<div class="video-container">
+    <video id="video" playsinline>
+        <source src="video/video.mp4" type="video/mp4">
+    </video>
+</div>
+
+<!-- BLUR -->
+<div class="blur-overlay" id="blur"></div>
+
+<!-- ACTION -->
+<div class="actions" id="actions">
+
+    <div class="final-text" id="finalText">
+        Makasih udah luangin waktu nya ya, daffa sayang kamu selalu 🖤
+    </div>
+
+    <button onclick="replay()">Putar ulang</button>
+    <button onclick="goBack()">Kembali</button>
+</div>
+
+<script>
+const overlay = document.getElementById("startOverlay");
+const video = document.getElementById("video");
+const actions = document.getElementById("actions");
+const finalText = document.getElementById("finalText");
+const blur = document.getElementById("blur");
+
+// TAP START
+overlay.addEventListener("click", () => {
+    video.play().catch(() => {});
+
+    overlay.style.opacity = "0";
+    overlay.style.transition = "0.6s";
+
+    setTimeout(() => {
+        overlay.style.display = "none";
+    }, 600);
+});
+
+// VIDEO END
+video.addEventListener("ended", () => {
+
+    // aktifkan blur dulu
+    blur.classList.add("show");
+
+    // muncul text
+    setTimeout(() => {
+        finalText.classList.add("show");
+    }, 300);
+
+    // lalu tombol
+    setTimeout(() => {
+        actions.classList.add("show");
+    }, 800);
+});
+
+// REPLAY
+function replay() {
+    actions.classList.remove("show");
+    finalText.classList.remove("show");
+    blur.classList.remove("show");
+
+    video.currentTime = 0;
+    video.play();
+}
+
+// BACK
+function goBack() {
+    window.location.href = "index.html";
+}
+</script>
+
+</body>
+</html>
